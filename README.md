@@ -1,0 +1,7 @@
+## Skool
+
+Skool
+
+#### License
+
+MIT
