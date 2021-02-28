@@ -1,11 +1,14 @@
 {
- "autoname": "format:{MM}-{DD}-{total_amount}",
+ "autoname": "format:{MM}-{DD}-{####}",
  "creation": "2021-02-23 20:56:49.321785",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "return",
+  "is_return",
+  "column_break_2",
+  "invoice_no",
+  "section_break_4",
   "items",
   "section_break_2",
   "round_off",
@@ -16,10 +19,12 @@
  ],
  "fields": [
   {
+   "fetch_from": "invoice_no.items",
    "fieldname": "items",
    "fieldtype": "Table",
    "label": "Items",
-   "options": "Sales Invoice Item"
+   "options": "Sales Invoice Item",
+   "reqd": 1
   },
   {
    "fieldname": "section_break_2",
@@ -29,6 +34,7 @@
    "default": "0",
    "fieldname": "round_off",
    "fieldtype": "Check",
+   "hidden": 1,
    "label": "Round Off"
   },
   {
@@ -36,29 +42,49 @@
    "fieldtype": "Column Break"
   },
   {
+   "fetch_from": "invoice_no.amount",
    "fieldname": "amount",
    "fieldtype": "Read Only",
    "label": "Amount"
   },
   {
+   "default": "0",
+   "fetch_from": "invoice_no.discount",
    "fieldname": "discount",
    "fieldtype": "Float",
    "label": "Discount",
    "precision": "2"
   },
   {
+   "fetch_from": "invoice_no.total_amount",
    "fieldname": "total_amount",
    "fieldtype": "Read Only",
+   "in_list_view": 1,
    "label": "Total Amount"
   },
   {
+   "fieldname": "column_break_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "invoice_no",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Invoice No.",
+   "options": "Sales Invoice"
+  },
+  {
+   "fieldname": "section_break_4",
+   "fieldtype": "Section Break"
+  },
+  {
    "default": "0",
-   "fieldname": "return",
+   "fieldname": "is_return",
    "fieldtype": "Check",
    "label": "Return"
   }
  ],
- "modified": "2021-02-23 21:01:32.152450",
+ "modified": "2021-02-28 21:56:22.600341",
  "modified_by": "Administrator",
  "module": "Skool",
  "name": "Sales Invoice",
