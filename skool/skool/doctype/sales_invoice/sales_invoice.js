@@ -81,6 +81,14 @@ frappe.ui.form.on('Sales Invoice Item', {
 			frm.refresh_field("items");
 		}
 		else{
+			frappe.call({
+				method:'skool.skool.doctype.sales_invoice.sales_invoice.get_stock',
+				args:{'item':frm.doc.items[index].item_code},
+				callback:function(res){
+					frm.set_value("stock", res.message);
+					frm.refresh_field("stock");
+				}
+			})
 			frm.doc.items[index].qty = 1;
 			frm.doc.items[index].amount = (parseFloat(frm.doc.items[index].qty) * parseFloat(frm.doc.items[index].rate) ).toFixed(2);
 			frm.refresh_field("items");
@@ -102,16 +110,44 @@ frappe.ui.form.on('Sales Invoice Item', {
                 break;
             }
         }
+		if(!frm.doc.items[index].item_code){
+			frm.doc.items[index].qty = '';
+			frappe.throw('Enter Item Code before Qty');
+			frm.refresh_field("items");
+		}
+		frappe.call({
+			method:'skool.skool.doctype.sales_invoice.sales_invoice.get_stock',
+			args:{'item':frm.doc.items[index].item_code},
+			callback:function(res){
+				frm.set_value("stock", res.message);
+				frm.refresh_field("stock");
+			}
+		})
+		frappe.call({
+			method:'skool.skool.doctype.sales_invoice.sales_invoice.check_qty',
+			args:{'item':frm.doc.items[index].item_code},
+			callback:function(res){
+				if(!res.exc){
+					if(frm.doc.items[index].qty > res.message){
+						frm.doc.items[index].qty = res.message;
+						frm.refresh_field("items");
+						frappe.msg("Only "+res.message+" Items in Stock");
+						frm.refresh_field("items");
+						return;
+					}
+				}
+			}
+		})
 		frm.doc.items[index].amount = parseFloat(frm.doc.items[index].qty) * parseFloat(frm.doc.items[index].rate)
 		frm.refresh_field("items");
 		var total = 0;
-			for (var i = 0; i<frm.doc.items.length; i++){
-				total += parseFloat(frm.doc.items[i].amount);
-			}
-			frm.set_value("amount", total);
-			frm.set_value("total_amount", total - parseFloat(frm.doc.discount))
-			frm.refresh_field("amount");
-			frm.refresh_field("total_amount");
+		for (var i = 0; i<frm.doc.items.length; i++){
+			total += parseFloat(frm.doc.items[i].amount);
+		}
+		frm.set_value("amount", total);
+		frm.set_value("total_amount", total - parseFloat(frm.doc.discount))
+		frm.refresh_field("amount");
+		frm.refresh_field("total_amount");
 	},
 	items_remove:function(frm, cdt, cdn){
 		console.log("HAI");

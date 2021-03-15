@@ -1,5 +1,5 @@
 {
- "creation": "2021-02-23 21:06:45.592417",
+ "creation": "2021-02-23 21:54:52.849989",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
@@ -13,10 +13,9 @@
  "fields": [
   {
    "fieldname": "item_code",
-   "fieldtype": "Link",
+   "fieldtype": "Read Only",
    "in_list_view": 1,
    "label": "Item Code",
-   "options": "Item",
    "reqd": 1
   },
   {
@@ -29,17 +28,15 @@
   {
    "default": "1",
    "fieldname": "qty",
-   "fieldtype": "Int",
+   "fieldtype": "Read Only",
    "in_list_view": 1,
    "label": "Qty"
   },
   {
-   "fetch_from": "item_code.price",
    "fieldname": "rate",
-   "fieldtype": "Float",
+   "fieldtype": "Read Only",
    "in_list_view": 1,
-   "label": "rate",
-   "precision": "2"
+   "label": "rate"
   },
   {
    "fieldname": "amount",
@@ -49,10 +46,10 @@
   }
  ],
  "istable": 1,
- "modified": "2021-03-07 17:00:38.255624",
+ "modified": "2021-03-11 21:26:04.006422",
  "modified_by": "Administrator",
- "module": "Skool",
- "name": "Purchase Invoice Item",
+ "module": "Stock",
+ "name": "Stock Ledger Item",
  "owner": "Administrator",
  "permissions": [],
  "quick_entry": 1,

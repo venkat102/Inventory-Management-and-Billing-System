@@ -49,9 +49,9 @@
   }
  ],
  "istable": 1,
- "modified": "2021-03-07 17:00:38.255624",
+ "modified": "2021-03-11 21:26:35.293947",
  "modified_by": "Administrator",
- "module": "Skool",
+ "module": "Purchase",
  "name": "Purchase Invoice Item",
  "owner": "Administrator",
  "permissions": [],

@@ -1,1 +1,4 @@
 Skool
+Sales
+Purchase
+Stock
