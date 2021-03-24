@@ -1,4 +1,5 @@
 {
+ "actions": [],
  "creation": "2021-02-23 20:52:57.524687",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -48,7 +49,8 @@
   }
  ],
  "istable": 1,
- "modified": "2021-02-28 13:06:33.831763",
+ "links": [],
+ "modified": "2021-03-22 00:54:45.563035",
  "modified_by": "Administrator",
  "module": "Skool",
  "name": "Sales Invoice Item",

@@ -8,6 +8,17 @@ frappe.ui.form.on('Sales Invoice', {
 			frm.refresh_field('is_return');
 		}
 	},
+	refresh: function(frm) {
+		frappe.call({
+			method: 'skool.skool.doctype.purchase_invoice.purchase_invoice.get_date',
+			callback: function(res){
+				if(res.message){
+					frm.set_value("date", res.message)
+					frm.refresh_field("date")
+				}
+			}
+		})
+	},
 	discount:function(frm){
 		var total = 0;
 		for (var i = 0; i<frm.doc.items.length; i++){

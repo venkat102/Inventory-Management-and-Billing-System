@@ -34,7 +34,7 @@ def get_stock(item):
 class SalesInvoice(Document):
 	def autoname(self):
 		if self.invoice_no:
-			self.name = self.invoice_no+'-Returned'
+			self.name = self.invoice_no+'-Returned-'+str(frappe.db.sql('''select count(name)+1 from `tabSales Invoice` where parent = %s or invoice_no=%s''', (self.invoice_no, self.invoice_no))[0][0])
 	def before_save(self):
 		for i in range(len(self.items)):
 			stock_qty = check_qty(self.items[i].item_code)
@@ -44,10 +44,20 @@ class SalesInvoice(Document):
 		if self.is_return:
 			if 'Returned' in self.invoice_no:
 				frappe.throw("Can not return a returned invoice")
-			if frappe.db.exists("Sales Invoice", self.invoice_no+'-Returned'):
-				frappe.throw("Invoice is already returned");
+			if frappe.db.exists("Sales Invoice", {'invoice_no':self.invoice_no}):
+				si = frappe.db.get_list("Sales Invoice Item", {'parent':self.invoice_no, 'name':["not like", '-Returned']}, ['item_code', 'item_name', 'qty', 'rate', 'amount'])
+				dict = {}
+				for i in si:
+					dict[i.item_code] = float(i.qty)
+				for i in frappe.db.get_list("Sales Invoice", {'invoice_no': self.invoice_no}, ['name']):
+					re = frappe.db.get_list("Sales Invoice Item", {'parent':i.name}, ['item_code', 'item_name', 'qty', 'rate', 'amount'])
+					for i in re:
+						dict[i.item_code] = dict[i.item_code] - float(i.qty)
+				print(si, re)
+				for i in self.items:
+					if i.qty > dict[i.item_code]:
+						frappe.throw(i.item_name+" has only "+str(dict[i.item_code])+" left for this invoice")
 		new_doc = frappe.new_doc("Stock Ledger")
-		print(i.__dict__)
 		new_doc.invoice_no = self.name
 		new_doc.invoice_type = 'Sales Invoice'
 		new_doc.amount = self.amount
@@ -62,8 +72,14 @@ class SalesInvoice(Document):
 			new_doc.amount = i.amount
 		new_doc.save()
 
-		for item in self.items:
-			doc = frappe.get_doc("Item", item.item_code)
-			doc.qty = int(doc.qty) - int(item.qty)
-			doc.save()
+		if 'Returned' in self.name:
+			for item in self.items:
+				doc = frappe.get_doc("Item", item.item_code)
+				doc.qty = int(doc.qty) + int(item.qty)
+				doc.save()
+		else:
+			for item in self.items:
+				doc = frappe.get_doc("Item", item.item_code)
+				doc.qty = int(doc.qty) - int(item.qty)
+				doc.save()
 		self.stock = None
