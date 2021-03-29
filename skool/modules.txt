@@ -1,4 +1,1 @@
 Skool
-Sales
-Purchase
-Stock

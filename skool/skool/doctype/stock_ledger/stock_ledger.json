@@ -72,7 +72,7 @@
   }
  ],
  "links": [],
- "modified": "2021-03-22 10:18:18.544708",
+ "modified": "2021-03-29 05:06:45.064911",
  "modified_by": "Administrator",
  "module": "Skool",
  "name": "Stock Ledger",
@@ -87,18 +87,6 @@
    "read": 1,
    "report": 1,
    "role": "System Manager",
-   "share": 1,
-   "write": 1
-  },
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "Sales User",
    "share": 1,
    "write": 1
   }

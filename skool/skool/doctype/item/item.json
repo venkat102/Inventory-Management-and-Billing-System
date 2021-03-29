@@ -48,7 +48,7 @@
   }
  ],
  "links": [],
- "modified": "2021-03-22 10:18:38.460023",
+ "modified": "2021-03-29 04:59:57.390794",
  "modified_by": "Administrator",
  "module": "Skool",
  "name": "Item",
@@ -65,21 +65,8 @@
    "role": "System Manager",
    "share": 1,
    "write": 1
-  },
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "Sales User",
-   "share": 1,
-   "write": 1
   }
  ],
- "quick_entry": 1,
  "search_fields": "item_name",
  "sort_field": "modified",
  "sort_order": "DESC",

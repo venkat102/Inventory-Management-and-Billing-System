@@ -4,6 +4,15 @@
 
 frappe.query_reports["Ledger Report"] = {
 	"filters": [
-
+		{
+			"fieldname": "from_date",
+			"fieldtype": "Date",
+			"label": "From Date"
+		},
+		{
+			"fieldname": "to_date",
+			"fieldtype": "Date",
+			"label": "To Date"
+		}
 	]
 };

@@ -23,24 +23,24 @@ class PurchaseInvoice(Document):
 			self.name = self.invoice_no+'-Returned'
 
 	def before_save(self):
-		for i in range(len(self.items)):
-			print(self.items[i].item_code)
-			doc = frappe.get_doc("Item", self.items[i].item_code)
-			doc.qty = int(doc.qty) + int(self.items[i].qty)
-			print(int(doc.qty) + int(self.items[i].qty))
-			doc.price = self.items[i].rate
-			doc.save()
-		frappe.db.commit()
-							
-				
 		if self.is_return:
 			if 'Returned' in self.invoice_no:
 				frappe.throw("Can not return a returned invoice")
 			if frappe.db.exists("Sales Invoice", self.invoice_no+'-Returned'):
 				frappe.throw("Invoice is already returned");
+			for item in self.items:
+				doc = frappe.get_doc("Item", item.item_code)
+				doc.qty = int(doc.qty) - int(item.qty)
+				doc.save()
+		else:
+			for item in self.items:
+				doc = frappe.get_doc("Item", item.item_code)
+				doc.qty = int(doc.qty) + int(item.qty)
+				doc.save()
 		new_doc = frappe.new_doc("Stock Ledger")
 		new_doc.invoice_no = self.name
-		new_doc.invoice_type = 'Purchase Invoice'
+		new_doc.date = self.date
+		new_doc.invoice_type = 'Purchase'
 		new_doc.amount = self.total_amount
 		new_doc.total_amount = self.total_amount
 		for i in self.items:
@@ -52,8 +52,10 @@ class PurchaseInvoice(Document):
 			new_doc.amount = i.amount
 		new_doc.save()
 
+		
+	def on_trash(self):
 		for item in self.items:
 			doc = frappe.get_doc("Item", item.item_code)
 			doc.qty = int(doc.qty) - int(item.qty)
 			doc.save()
-		self.stock = None
+		frappe.db.delete("Sales Invoice", {'invoice_no':self.name})

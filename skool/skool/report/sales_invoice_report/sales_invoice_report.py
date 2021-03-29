@@ -33,6 +33,6 @@ def execute(filters=None):
 	return columns, data
 
 def get_data(filters):
-	to_date = datetime.strptime(filters.to_date, "%Y-%m-%d")
-	from_date = datetime.strptime(filters.from_date, "%Y-%m-%d")
+	to_date = datetime.strptime(filters.to_date, "%Y-%m-%d").date()
+	from_date = datetime.strptime(filters.from_date, "%Y-%m-%d").date()
 	return frappe.db.sql('''select item_name, qty, amount from `tabSales Invoice Item` where creation>=%s and creation<=%s group by item_name order by qty desc''',(from_date, to_date))

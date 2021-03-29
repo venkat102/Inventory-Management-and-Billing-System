@@ -59,7 +59,8 @@ class SalesInvoice(Document):
 						frappe.throw(i.item_name+" has only "+str(dict[i.item_code])+" left for this invoice")
 		new_doc = frappe.new_doc("Stock Ledger")
 		new_doc.invoice_no = self.name
-		new_doc.invoice_type = 'Sales Invoice'
+		new_doc.date = self.date
+		new_doc.invoice_type = 'Sales'
 		new_doc.amount = self.amount
 		new_doc.discount = self.discount
 		new_doc.total_amount = self.total_amount
@@ -71,7 +72,7 @@ class SalesInvoice(Document):
 			new_row.rate = i.rate
 			new_doc.amount = i.amount
 		new_doc.save()
-
+		self.stock = None
 		if 'Returned' in self.name:
 			for item in self.items:
 				doc = frappe.get_doc("Item", item.item_code)
